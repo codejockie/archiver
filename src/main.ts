@@ -1,7 +1,5 @@
 import Vue from "vue";
-// @ts-ignore
 import VCalendar from "v-calendar";
-// @ts-check
 import App from "./App.vue";
 import router from "./router";
 
