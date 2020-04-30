@@ -1,18 +1,47 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <div class="pl-6">
+      <DatePicker :onDateChange="onDateChange" :search="searchArchive" />
+    </div>
+    <Mails :mails="mails" />
   </div>
 </template>
 
-<script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+<script lang="ts">
+import Vue from "vue";
+import Range from "@/models/Range";
+import { getMails } from "@/helpers/mail";
+import { MailExtra } from "@/models/Mail";
+import Mails from "@/components/Mails.vue";
+import { isBetween } from "@/helpers/dateTime";
+import DatePicker from "@/components/DatePicker.vue";
 
-export default {
+interface Data {
+  mails: MailExtra[];
+}
+
+export default Vue.extend({
   name: "Home",
   components: {
-    HelloWorld
+    DatePicker,
+    Mails
+  },
+  data(): Data {
+    return {
+      mails: []
+    };
+  },
+  methods: {
+    onDateChange(/* date: Range */): void {
+      // const { end, start } = date;
+      // this.mails = data.filter((m: Mail) => isBetween(m.date, start, end));
+    },
+    searchArchive(date: Range): void {
+      const { end, start } = date;
+      this.mails = getMails().filter((m: MailExtra) =>
+        isBetween(m.date, start, end)
+      );
+    }
   }
-};
+});
 </script>
