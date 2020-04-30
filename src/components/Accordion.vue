@@ -17,7 +17,7 @@
             {{ getTo(mail.to) }}
           </span>
         </span>
-        <span class="float-right">
+        <span class="float-right relative">
           <img
             class="inline h-4 w-4 mr-1"
             src="../assets/icon_clip.svg"
@@ -30,11 +30,13 @@
             src="../assets/icon_arrow02.svg"
             alt="Arrow02"
           />
-          <div class="flex flex-wrap">
-            <span class="ml-6" v-if="mail.count > 1">
-              <Badge>+{{ mail.count - 1 }}</Badge>
-            </span>
-          </div>
+          <span
+            id="badge-container"
+            class="absolute right-0 top-30 ml-6"
+            v-if="mail.count > 1"
+          >
+            <Badge>+{{ mail.count - 1 }}</Badge>
+          </span>
         </span>
       </div>
       <div class="text-black text-lg truncate mt-1 pl-2 pb-2">
@@ -73,8 +75,7 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-#badge {
-  max-width: 2.5rem;
-  min-width: 2rem;
+#badge-container {
+  top: 27px;
 }
 </style>
