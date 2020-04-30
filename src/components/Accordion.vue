@@ -1,0 +1,80 @@
+<template>
+  <div class="border-b-2 font-medium">
+    <div class="h-28 px-4" @click.prevent="active = !active">
+      <div class="text-black mt-1 pt-3">
+        <span class="float-left inline-block">
+          <img
+            class="h-8 w-8 mt-2"
+            src="../assets/icon_mail_sp.svg"
+            alt="Mail"
+          />
+        </span>
+        <span class="inline-block">
+          <span class="block font-bold text-black truncate mt-0">
+            {{ mail.from }}
+          </span>
+          <span class="block text-black truncate mt-0">
+            {{ getTo(mail.to) }}
+          </span>
+        </span>
+        <span class="float-right">
+          <img
+            class="inline h-4 w-4 mr-1"
+            src="../assets/icon_clip.svg"
+            alt="Clip"
+            v-if="mail.attachment"
+          />
+          {{ formatDate(mail.date) }}
+          <img
+            class="inline h-2 w-2"
+            src="../assets/icon_arrow02.svg"
+            alt="Arrow02"
+          />
+          <div class="flex flex-wrap">
+            <span class="ml-6" v-if="mail.count > 1">
+              <Badge>+{{ mail.count - 1 }}</Badge>
+            </span>
+          </div>
+        </span>
+      </div>
+      <div class="text-black text-lg truncate mt-1 pl-2 pb-2">
+        {{ mail.subject }}
+      </div>
+    </div>
+    <div class="block bg-gray-400 border-t-4 border-gray p-2" v-show="active">
+      <p class="font-bold px-4">{{ mail.from }}</p>
+      <p class="pb-5 px-4">
+        {{ mail.body }}
+      </p>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import Vue from "vue";
+import Badge from "@/components/Badge.vue";
+
+export default Vue.extend({
+  name: "Accordion",
+  components: {
+    Badge
+  },
+  data() {
+    return {
+      active: false
+    };
+  },
+  props: {
+    formatDate: Function,
+    getTo: Function,
+    mail: Object
+  }
+});
+</script>
+
+<style scoped>
+#badge {
+  max-width: 2.5rem;
+  min-width: 2rem;
+}
+</style>
