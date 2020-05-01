@@ -13,81 +13,18 @@
     </div>
     <div v-if="!show">
       <div class="hidden mx-6 md:block">
-        <table class="border-collapse w-full">
-          <thead
-            class="text-left bg-gray-200 border-b border-gray-400 border-t select-none"
-          >
-            <th class="border-b-2 border-gray-400 p-3">From</th>
-            <th class="border-b-2 border-gray-400 p-3">To</th>
-            <th class="border-b-2 border-gray-400 p-3">Subject</th>
-            <th class="border-b-2 border-gray-400 p-3">
-              <span class="text-black font-semibold">Date</span>
-              <img
-                class="inline h-3 w-3 ml-2"
-                src="../assets/icon_arrow01.svg"
-                alt="Sort Asc"
-              />
-            </th>
-          </thead>
-          <tbody class="cursor-pointer font-medium text-black text-left">
-            <tr
-              v-for="mail in mails"
-              :key="mail.id"
-              class="relative hover:bg-gray-100 hover:text-blue-800"
-              v-on:mouseover="
-                tooltipInfo = mail;
-                showToolTip = true;
-              "
-              v-on:mouseleave="
-                tooltipInfo = {};
-                showToolTip = false;
-              "
-            >
-              <td class="border-b-2 border-gray-400 truncate p-3">
-                {{ mail.from }}
-              </td>
-              <td class="border-b-2 border-gray-400 truncate p-3">
-                <span>{{ getTo(mail.to) }}</span>
-                <span class="float-right mt-1" v-if="mail.count > 1">
-                  <Badge>+{{ mail.count - 1 }}</Badge>
-                </span>
-              </td>
-              <td class="border-b-2 border-gray-400 truncate p-3">
-                {{ mail.subject }}
-                <span v-if="mail.attachment">
-                  <img
-                    class="float-right h-4 w-4"
-                    src="../assets/icon_clip.svg"
-                    alt="Clip"
-                  />
-                </span>
-              </td>
-              <td class="border-b-2 border-gray-400 font-bold p-3">
-                {{ formatDate(mail.date) }}
-              </td>
-            </tr>
-            <Tooltip :mail="info" :show="showToolTip" />
-          </tbody>
-        </table>
+        <ListHeader :grid="true" />
+        <GridList
+          v-for="mail in mails"
+          :key="mail.id"
+          :formatDate="formatDate"
+          :getTo="getTo"
+          :mail="mail"
+        />
       </div>
       <div class="md:hidden">
-        <div
-          class="divide-gray-400 bg-gray-200 border-b border-gray-400 border-t select-none h-12 p-3"
-        >
-          <span class="text-black font-semibold">From</span>
-          <img
-            class="inline h-3 w-3 ml-2"
-            src="../assets/icon_arrow01.svg"
-            alt="Sort Asc"
-          />
-          <span class="border-gray-700 border-r-2 ml-2 mr-2"></span>
-          <span class="font-semibold">To</span>
-          <span class="border-gray-700 border-r-2 ml-2 mr-2"></span>
-          <span class="font-semibold">Subject</span>
-          <span class="border-gray-700 border-r-2 ml-2 mr-2"></span>
-          <span class="font-semibold">Date</span>
-        </div>
-        <Accordion
+        <ListHeader :mobile="true" />
+        <MobileList
           v-for="mail in mails"
           :key="mail.id"
           :formatDate="formatDate"
@@ -104,20 +41,23 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { formatTo } from "@/helpers/mail";
 import { MailExtra } from "@/models/Mail";
 import Badge from "@/components/Badge.vue";
-import Tooltip from "@/components/Tooltip.vue";
-import Accordion from "@/components/Accordion.vue";
+import FlexList from "@/components/FlexList.vue";
+import GridList from "@/components/GridList.vue";
 import { formatDateTime } from "@/helpers/dateTime";
+import MobileList from "@/components/MobileList.vue";
+import ListHeader from "@/components/ListHeader.vue";
 
 @Component({
   components: {
-    Accordion,
     Badge,
-    Tooltip
+    GridList,
+    FlexList,
+    ListHeader,
+    MobileList
   }
 })
 export default class Mails extends Vue {
   private info = {};
-  private showToolTip = false;
   @Prop({ required: true, type: Array }) readonly mails!: MailExtra[];
 
   get show() {
@@ -135,14 +75,6 @@ export default class Mails extends Vue {
 
   formatDate(date: string) {
     return formatDateTime(date);
-  }
-
-  get tooltipInfo() {
-    return this.info;
-  }
-
-  set tooltipInfo(info: object) {
-    this.info = info;
   }
 }
 </script>
