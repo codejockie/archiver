@@ -43,12 +43,14 @@
         {{ mail.subject }}
       </div>
     </div>
-    <div class="block bg-gray-400 border-t-4 border-gray p-2" v-show="active">
-      <p class="font-bold px-4">{{ mail.from }}</p>
-      <p class="pb-5 px-4">
-        {{ mail.body }}
-      </p>
-    </div>
+    <transition name="slide">
+      <div class="bg-gray-400 border-t-4 border-gray p-2" v-show="active">
+        <p class="font-bold px-4">{{ mail.from }}</p>
+        <p class="pb-5 px-4">
+          {{ mail.body }}
+        </p>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -57,7 +59,7 @@ import Vue from "vue";
 import Badge from "@/components/Badge.vue";
 
 export default Vue.extend({
-  name: "Accordion",
+  name: "MobileList",
   components: {
     Badge
   },
